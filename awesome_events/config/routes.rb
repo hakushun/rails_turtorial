@@ -5,9 +5,11 @@ Rails.application.routes.draw do
   delete "/logout" => "sessions#destroy"
   get 'status' => 'status#index', defaults: { format: 'json' }
 
-  resource :retirements
+  resource :retirements, only: %i[new create]
 
-  resources :events do
-    resources :tickets
+  resources :events, only: %i[new create show edit update destroy] do
+    resources :tickets, only: %i[new create destroy]
   end
+
+  match "*path" => "application#error404", via: :all
 end
